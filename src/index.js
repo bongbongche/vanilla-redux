@@ -10,9 +10,9 @@ const DELETE_TODO = "DELETE_TODO";
 const reducer = (state = [], action) => {
   switch (action.type) {
     case ADD_TODO:
-      return state.push(action.text);
+      return [...state, { text: action.text, id: Date.now() }];
     case DELETE_TODO:
-      return state.push(action.text);
+      return state.concat(action.text);
     default:
       return state;
   }
@@ -20,11 +20,13 @@ const reducer = (state = [], action) => {
 
 const store = createStore(reducer);
 
+store.subscribe(() => console.log(store.getState()));
+
 const onSubmit = (e) => {
   e.preventDefault();
   const toDo = input.value;
   store.dispatch({ type: ADD_TODO, text: toDo });
-  console.log(store.getState());
+  // console.log(store.getState());
   input.value = "";
 };
 
