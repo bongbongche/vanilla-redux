@@ -7,5 +7,8 @@
 - never, ever never, ever ever, never mutate state  
   instead of that, make a new array.  
   for example,  
-   _Bad_ state.push(action.text)  
-   _Good_ [...state, {text: action.text}]
+   **Bad** - state.push(action.text)  
+   **Good** - [...state, {text: action.text}]  
+   **Good** - state.filter(toDo => toDo.id !== action.id)
+
+- filter() returns a new array
