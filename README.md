@@ -125,3 +125,40 @@
     But I have to choose mutation or not through 'return'  
     If i choose mutation, just push(), not return. because redux will make a new state.  
     If i choose return, I have to make a new state. Like a filter()
+
+- createSlice() replaces all
+
+**Before**
+
+```
+const addToDo = createAction("ADD");
+const deleteToDo = createAction("DELETE");
+
+const reducer = createReducer([], {
+  [addToDo]: (state, action) => {
+    state.push({ text: action.payload, id: Date.now() });
+  },
+  [deleteToDo]: (state, action) =>
+    state.filter((toDo) => toDo.id !== action.payload),
+});
+```
+
+**After**
+
+```
+const toDos = createSlice({
+  name: "toDosReducer",
+  initialState: [],
+  reducers: {
+    add: (state, action) => {
+      state.push({ text: action.payload, id: Date.now() });
+    },
+    remove: (state, action) =>
+      state.filter((toDo) => toDo.id !== action.payload),
+  },
+});
+
+const store = configureStore({ reducer: toDos.reducer });
+
+export const { add, remove } = toDos.actions;
+```
