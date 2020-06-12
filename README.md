@@ -90,3 +90,38 @@
 
   Before createAction(), action's argument name was arbitrary.  
   After createAction(), action's argument is unified to 'payload'
+
+- createReducer() replaces reducer
+
+  **Before**
+
+  ```
+  const reducer = (state = [], action) => {
+    switch (action.type) {
+      case addToDo.type:
+        return [{ text: action.payload, id: Date.now() }, ...state];
+      case deleteToDo.type:
+        return state.filter((toDo) => toDo.id !== action.payload);
+      default:
+        return state;
+    }
+  };
+  ```
+
+  **After**
+
+  ```
+  const reducer = createReducer([], {
+    [addToDo]: (state, action) => {
+      state.push({ text: action.payload, id: Date.now() });
+    },
+    [deleteToDo]: (state, action) =>
+      state.filter((toDo) => toDo.id !== action.payload),
+  });
+  ```
+
+  - Don't need to write 'state = 0'. Just write '0'
+  - No more switch statement. And It can **mutate** state. For example state.push()  
+    But I have to choose mutation or not through 'return'  
+    If i choose mutation, just push(), not return. because redux will make a new state.  
+    If i choose return, I have to make a new state. Like a filter()
